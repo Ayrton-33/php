@@ -3,11 +3,29 @@ ini_set("display_errors", 1);
 ini_set("display_startup-errors", 1);
 error_reporting(E_ALL);
 
+$iva=21;
+$precioSinIva = 0;
+$precioConIva = 0;
+$ivaCantidad = 0;
 
 
 
+if($_POST){
+    $iva= $_POST["lstIva"];
+    $precioSinIva= ($_POST["txtPrecioSinIva"]) > 0? $_POST["txtPrecioSinIva"]:0;
+    $precioConIva= ($_POST["txtPrecioConIva"]) > 0? $_POST["txtPrecioConIva"]:0;
 
+//Dado un importe sin IVA, Precio con IVA = importe * (21/100+1)
+    if($precioSinIva > 0){
+        $precioConIva = $precioSinIva * ($iva/100+1);
+    }
+//Dado un importe con IVA, Precio sin IVA = importe / (21/100+1)
+    if($precioConIva >0){
+        $precioSinIva = $precioConIva / ($iva/100+1);
+    }
 
+    $ivaCantidad = $precioConIva - $precioSinIva;
+}
 
 ?>
 <!DOCTYPE html>
@@ -31,24 +49,23 @@ error_reporting(E_ALL);
         </div>
         <div class="row">
             <div class="col-3 offset-3">
-                <form>
+                <form method="POST">
                     <div>
-                        <label for="IstIVA">IVA:</label>
-                        <select name="IstIVA" id="IstIVA" class="form-control">
-                            <option disabled selected>Seleccionar</option>
+                        <label for="">IVA:</label>
+                        <select name="lstIva" id="lstIva" class="form-control">
                             <option value="10.5">10.5</option>
-                            <option value="17">17</option>
-                            <option value="21">21</option>
+                            <option value="19">19</option>
+                            <option value="21" selected>21</option>
                             <option value="27">27</option>
-                        </select>    
+                        </select>   
                     </div>
                     <div class="mt-3">
                         <label for="">Precio sin IVA:</label>
-                        <input type="text" name="txtPreciosiniva" id="txtPreciosiniva" class="form-control">
+                        <input type="text" name="txtPrecioSinIva" id="txtPrecioSinIva" class="form-control">
                     </div>
                     <div class="mt-3">
                         <label for="">Precio con IVA:</label>
-                        <input type="text" name="txtPrecioconiva" id="txtPrecioconiva" class="form-control">
+                        <input type="text" name="txtPrecioConIva" id="txtPrecioConIva" class="form-control">
                     </div>
                     <div class="mt-3">
                         <button type="submit" class="btn btn-primary">Calcular</button>
@@ -59,28 +76,24 @@ error_reporting(E_ALL);
                 <table class="table table-hover border">
                     <tr>
                         <th>IVA:</th>
-                        <td>%</td>
+                        <td><?php echo $iva;?>%</td>
                     </tr>
                     <tr>
                         <th>Precio sin IVA:</th>
-                        <td></td>
+                        <td><?php echo number_format($precioSinIva, 2, ",", ".");?></td>
                     </tr>
                     <tr>
                         <th>Precio con IVA:</th>
-                        <td></td>
+                        <td><?php echo number_format($precioConIva, 2, ",", ".");?></td>
                     </tr>
                     <tr>
                         <th>IVA cantidad:</th>
-                        <td></td>
+                        <td><?php echo number_format($ivaCantidad, 2, ",", ".");?></td>
                     </tr>
 
                 </table>
             </div>
         </div>
-
-
     </main>
-
 </body>
-
 </html>
