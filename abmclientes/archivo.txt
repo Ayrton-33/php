@@ -1,1 +1,1 @@
-[{"dni":"37640860","nombre":"Ayrton Acevedo","telefono":"03512131135","correo":"ayrton.94acevedo@gmail.com"},{"dni":"41750926","nombre":"Jazmin Acevedo","telefono":"2664589898","correo":"jazmin@gail.com"}]
+{"":{"documento":"37640860","nombre":"Ayrton Acevedo","telefono":"03512131135","correo":"ayrton.94acevedo@gmail.com","imagen":"2022081801083037.png"}}
