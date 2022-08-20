@@ -3,6 +3,40 @@
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
+
+if (file_exists("tareas.txt")){
+    $jsonTareas = file_get_contents("tareas.txt");
+
+    $aTareas = json_decode($jsonTareas, true);
+}else{
+    
+    $aTareas =array();
+}
+
+
+
+if($_POST){
+        $prioridad =$_POS["IstPrioridad"];
+        $usuario =$_POST["IstUsuario"];
+        $estado =$_POST["IstEstado"];
+        $titulo =$_POST["txtTitulo"];
+        $descripcion =$_POST["txtDescripcion"];
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ?>
 <!DOCTYPE html>
 <html lang="es">

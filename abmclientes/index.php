@@ -14,7 +14,7 @@ if(file_exists("archivo.txt")){
 
 } else {
 //Si no existe el archivo
-    //Creamos un aClientes inicializado como un array vació
+    //Creamos un aClientes inicializado como un array vacio
     $aClientes = array();
 }
 
