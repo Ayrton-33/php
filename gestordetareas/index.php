@@ -10,7 +10,7 @@ if (file_exists("archivo.txt")) {
     $aTareas = json_decode($strJson, true);
 } else {
     //Si el archivo no existe es porque no hay tareas
-    $aTareas = array();
+    $aTareas =array();
 }
 
 if (isset($_GET["id"]) && $_GET["id"] >= 0)  {
