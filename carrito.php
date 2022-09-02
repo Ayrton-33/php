@@ -97,25 +97,43 @@ class Carrito{
     public function cargarProducto($producto){
         $this->aProductos[] = $producto;
     }
-    public function imprimirTicket(){
-        echo '<table class= "table table-hover border">'
-        echo '<tr><th colspan= "2" class="text-center">ECO MARKET</th></tr>
+    public function imprimirTicket() {
+        echo "<table class='table table-hover border'>";
+        echo "<tr><th colspan='2' class='text-center'>ECO MARKET</th></tr>
               <tr>
-              <th>Fecha</th>
-              <td>' . date("d/m/Y H:i:s") . '</td>
+                <th>Fecha</th>
+                <td>" . date("d/m/Y H:i:s") . "</td>
               </tr>
               <tr>
-              <th>DNI</th>
-              <td> ' . $this->cliente->dni . '</td>
+                <th>DNI</th>
+                <td>" . $this->cliente->dni . "</td>
+              </tr>
               <tr>
-              <th>Nombre</th>
-              <td> ' . $this->cliente->nombre . '</td>
+                <th>Nombre</th>
+                <td>" . $this->cliente->nombre . "</td>
+              </tr>
               <tr>
-              <th colspan= "2">Productos:</th>
-              </tr>';
-              foreach
+                <th colspan='2'>Productos:</th>
+              </tr>";
+              foreach ($this->aProductos as $producto) {
+                echo "<tr>
+                            <td>" . $producto->nombre . "</td>
+                            <td>$ " . number_format($producto->precio, 2, ",", ".") . "</td>
+                        </tr>";
+                $this->subTotal += $producto->precio;
+                $this->total += $producto->precio * (($producto->iva / 100)+1);
+              }
+             
+        echo "<tr>
+                <th>Subtotal s/IVA:</th>
+                <td>$ " . number_format($this->subTotal, 2, ",", ".") . "</td>
+              </tr>
+            <tr>
+                <th>TOTAL:</th>
+                <td>$ " . number_format($this->total, 2, ",", ".") . "</td>
+              </tr>
+        </table>";
     }
-
 }
 
 //Programa
@@ -150,12 +168,22 @@ $carrito->cargarProducto($producto1);
 $carrito->cargarProducto($producto2);
 $carrito-> imprimirTicket();
 
-
-
-
-
-
-
-
-
 ?>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ECO MARKET</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-12 mt-5">
+                <?php $carrito->imprimirTicket(); ?>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
