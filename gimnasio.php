@@ -13,6 +13,12 @@ class Persona{
     protected $correo;
     protected $celular;
 
+    public function __construct($dni, $nombre, $correo, $celular) {
+        $this->dni = $dni;
+        $this->nombre = $nombre;
+        $this->correo = $correo;
+        $this->celular = $celular;
+    }
     
     public function __set($name, $value)
     {
@@ -27,7 +33,6 @@ class Persona{
     
 }
 
-
 class Alumno extends Persona{
     private $fechaNac;
     private $peso;
@@ -35,8 +40,12 @@ class Alumno extends Persona{
     private $aptoFisico;
     private $presentismo;
 
-    public function __construct()
-    {
+    public function __construct($dni, $nombre, $correo, $celular, $fechaNac)
+    {   $this->dni = $dni;
+        $this->nombre = $nombre;
+        $this->correo = $correo;
+        $this->celular = $celular;
+        $this->fechaNac = $fechaNac;
         $this->peso= 0.0;
         $this->altura= 0.0;
         $this->aptoFisico= false;
@@ -53,16 +62,21 @@ class Alumno extends Persona{
         return $this-> $name;
     }
 
-    public function setFichaMedica(){
-
+    public function setFichaMedica($peso, $altura, $aptoFisico){
+        $this->peso = $peso;
+        $this->altura = $altura;
+        $this->aptoFisico = $aptoFisico; 
     }
 }
 
 class Entrenador extends Persona{
     private $aClases;
 
-    public function __construct()
-    {
+    public function __construct($dni, $nombre, $correo, $celular)
+    {   $this->dni = $dni;
+        $this->nombre = $nombre;
+        $this->correo = $correo;
+        $this->celular = $celular;
         $this->aClases= array();
     }
 
@@ -76,8 +90,8 @@ class Entrenador extends Persona{
         return $this-> $name;
     }
 
-    public function asignarClase(){
-
+    public function asignarClase($clase){
+        $this->aClases[]= $clase;
     }
 }
 
@@ -101,16 +115,25 @@ class Clase{
         return $this-> $name;
     }
 
-    public function asignarEntrendor(){
-
+    public function asignarEntrendor($entrenador){
+        $this-> entrenador= $entrenador;
     }
 
-    public function inscribirAlumno(){
-
+    public function inscribirAlumno($alumno){
+        $this->aAlumnos[] = $alumno;
     }
 
     public function imprimirListado(){
         
+        echo "<table class='table table-bordered table-hover'>"; 
+        echo "<tr><th colspan='4' class='text-center table-dark'>Clase: " . $this->nombre . "</th></tr>";
+        echo "<tr><th colspan='2'>Entrenador:</th><td colspan='2'>" . $this->entrenador->nombre . "</td></tr>";
+        echo "<tr><th colspan='4'>Alumnos inscriptos:</th></tr>";
+        echo "<tr><th>DNI</th><th>Nombre</th><th>Correo</th><th>Celular</th>";
+        foreach($this->aAlumnos as $alumno){
+            echo "<tr><td>" . number_format($alumno->dni,0,",",".") . "</td><td>" . $alumno->nombre ."</td><td>" . $alumno->correo . "</td><td>" . $alumno->celular . "</th></tr>";
+        }
+        echo "</table>";
     }
 }
 
@@ -141,7 +164,7 @@ $clase1-> asignarEntrendor($entrenador1);
 $clase1-> inscribirAlumno($alumno1);
 $clase1-> inscribirAlumno($alumno2);
 $clase1-> inscribirAlumno($alumno4);
-$clase1-> imprimirListado();
+//$clase1-> imprimirListado();
 
 $clase2 = new Clase();
 $clase2-> nombre= "Zumba";
@@ -149,9 +172,37 @@ $clase2-> asignarEntrendor($entrenador2);
 $clase2-> inscribirAlumno($alumno1);
 $clase2-> inscribirAlumno($alumno2);
 $clase2-> inscribirAlumno($alumno3);
-$clase2-> imprimirListado();
-
-
-
+//$clase2-> imprimirListado();
 
 ?>
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- CSS only -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+    <title>Gimnasio</title>
+</head>
+<body>
+    <main class="container">
+        <div class="row">
+            <div class="col-12 py-5">
+                <h1>Gimnasio:</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 py-5">
+                <?php $clase1-> imprimirListado(); ?>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 py-5">
+                <?php $clase2-> imprimirListado(); ?>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
