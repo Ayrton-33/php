@@ -17,7 +17,7 @@ if($_POST){
 
     
     //Crear una variable de session con tu nombre
-    $_SESSION["nombre"]="Ayrton Acevedo";
+    $_SESSION["nombre"]="Ayrton";
     //Redireccionar a index.php
     header("Location: index.php");
 
