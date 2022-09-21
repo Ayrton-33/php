@@ -6,6 +6,13 @@ error_reporting(E_ALL);
 include_once("config.php");
 include_once("header.php");
 
+if($_POST){
+    if(isset($_POST["btnGuardar"])){
+        $tipoProducto = new TipoProducto();
+        $tipoProducto->cargarFormulario($_REQUEST);
+        $tipoProducto->insertar();
+    }
+}   
 
 ?>
 
