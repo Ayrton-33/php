@@ -20,6 +20,12 @@
         return $this;
     }
 
+    public function cargarFormulario($request)
+    {
+        $this->idtipoproducto = isset($request["id"]) ? $request["id"] : "";
+        $this->nombre = isset($request["txtNombre"]) ? $request["txtNombre"] : "";
+    }
+
     public function insertar()
     {
         //Instancia la clase mysqli con el constructor parametrizado
