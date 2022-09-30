@@ -11,7 +11,8 @@ include_once("header.php");
 
 ?>
 
-    <div class="container-fluid">
+
+<div class="container-fluid">
 
         <h1 class="h3 mb-4 text-gray-800">Listado de tipo de productos</h1>
         <div class="row">
@@ -23,4 +24,19 @@ include_once("header.php");
             <tr>
                 <th>Nombre</th>    
                 <th>Acciones</th>
-            </tr>        
+            </tr>
+            <tr>
+            <?php foreach($aTipoProductos as $tipoProducto) : ?>
+                <td><?php echo $tipoProducto->nombre; ?></td>        
+                <td>
+                    <a href="tipoproducto-formulario.php?id=<?php echo $tipoProducto->idtipoproducto; ?>"><i class="fa-sharp fa-solid fa-pen"></i></a>
+                </td>        
+                
+            </tr>
+
+            <?php endforeach; ?>
+         
+        </table>
+</div>
+
+<?php include_once "footer.php"; ?>
