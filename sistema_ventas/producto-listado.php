@@ -12,7 +12,7 @@ include_once("header.php")
         </div>
         <div class="row">
             <div class="col-12 mt-4">
-                <button type="submit" class="btn btn-primary">Nuevo</button>
+            <a href="producto-formulario.php" class="btn btn-primary mr-2">Nuevo</a>
             </div>
         </div>
         <div class="row">

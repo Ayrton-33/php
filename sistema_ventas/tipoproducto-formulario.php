@@ -5,7 +5,7 @@ error_reporting(E_ALL);
 
 include_once("entidades/tipoproducto.php");
 include_once("config.php");
-include_once("header.php");
+
 
 $tipoProducto = new TipoProducto();
 
@@ -13,7 +13,7 @@ if ($_POST) {
     if (isset($_POST["btnGuardar"])) {
         $tipoProducto->cargarFormulario($_REQUEST);
 
-        if (isset($_GET["id"]) && $_GET["id"] < 0) {
+        if (isset($_GET["id"]) && $_GET["id"] > 0) {
             $tipoProducto->actualizar();
             $msg["texto"] = "Actualizado correctamente";
             $msg["codigo"] = "alert-success";
@@ -34,6 +34,7 @@ if (isset($_GET["id"]) && $_GET["id"] > 0) {
     $tipoProducto->obtenerPorId();
 }
 
+include_once("header.php");
 ?>
 
 <div class="container-fluid">

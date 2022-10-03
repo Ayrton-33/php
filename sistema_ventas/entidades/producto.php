@@ -9,6 +9,7 @@ use Producto as GlobalProducto;
      private $precio;
      private $descripcion;
      private $fk_idtipoproducto;
+     private $imagen;
 
 
      
@@ -28,6 +29,15 @@ use Producto as GlobalProducto;
         return $this;
     }
 
+    public function cargarFormulario($request){
+        $this->idproducto = isset($request["id"])? $request["id"] : "";
+        $this->nombre = isset($request["txtNombre"])? $request["txtNombre"] : "";
+        $this->fk_idtipoproducto = isset($request["lstTipoProducto"])? $request["lstTipoProducto"] : "";
+        $this->cantidad = isset($request["txtCantidad"])? $request["txtCantidad"]: 0;
+        $this->precio = isset($request["txtPrecio"])? $request["txtPrecio"]: 0;
+        $this->descripcion = isset($request["txtDescripcion"])? $request["txtDescripcion"] : "";
+    }
+
     public function insertar()
     {
         //Instancia la clase mysqli con el constructor parametrizado
@@ -39,12 +49,14 @@ use Producto as GlobalProducto;
                     precio,
                     descripcion,
                     fk_idtipoproduto,
+                    imagen,
                 ) VALUES (
                     '$this->nombre',
                     '$this->cantidad',
                      $this->precio,
                     '$this->descripcion',
-                    $this->fk_idtipoproducto
+                    $this->fk_idtipoproducto,
+                    '$this->imagen'
                 );";
          //print_r($sql);exit;
         //Ejecuta la query
@@ -66,6 +78,7 @@ use Producto as GlobalProducto;
                 cantidad = '$this->cantidad',
                 precio = $this->precio,
                 descripcion = '$this->descripcion',
+                imagen = '$this->imagen',
                 fk_idtipoproducto =  $this->fk_idtipoproducto
                 WHERE idcliente = $this->idcliente";
 
@@ -94,6 +107,7 @@ use Producto as GlobalProducto;
                         cantidad,
                         precio,
                         descripcion,
+                        imagen,
                         fk_idtipoproducto
                 FROM productos
                 WHERE idproducto = $this->idproducto";
@@ -109,6 +123,7 @@ use Producto as GlobalProducto;
             $this->precio = $fila["precio"];
             $this->descripcion = $fila["descripcion"];
             $this->fk_idtipoproducto = $fila["fk_idtipoproducto"];
+            $this->imagen = $fila["imagen"];
         }
         $mysqli->close();
 
@@ -122,6 +137,7 @@ use Producto as GlobalProducto;
                     cantidad,
                     precio,
                     descripcion,
+                    imagen,
                     fk_idtipoproducto
                 FROM productos";
         if (!$resultado = $mysqli->query($sql)) {
@@ -139,10 +155,12 @@ use Producto as GlobalProducto;
                 $entidadAux->cantidad = $fila["cantidad"];
                 $entidadAux->precio = $fila["precio"];
                 $entidadAux->descripcion = $fila["descripcion"];
+                $entidadAux->imagen = $fila["imagen"];
                 $entidadAux->fk_idtipoproducto = $fila["fk_idtipoproducto"];
                 $aResultado[] = $entidadAux;
             }
         }
+        $mysqli->close();
         return $aResultado;
     }
 
