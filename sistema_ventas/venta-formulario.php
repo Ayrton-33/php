@@ -1,9 +1,9 @@
-<?php 
+<?php
 
-include_once("config.php");
-include_once("entidades/cliente.php");
-include_once("entidades/producto.php");
-include_once("entidades/venta.php");
+include_once "config.php";
+include_once "entidades/cliente.php";
+include_once "entidades/producto.php";
+include_once "entidades/venta.php";
 
 $venta = new Venta();
 
@@ -40,34 +40,33 @@ $producto = new Producto();
 $aProductos = $producto->obtenerTodos();
 
 $pg = "Edición de ventas";
-include_once("header.php");
-
+include_once("header.php"); 
 ?>
+        <div class="container-fluid">
 
-<div class="container">
-    <div class="row">
-        <div class="col-12 mt-4">
-            <h1>Venta</h1>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-12 mt-4">
-            <a href="venta-listado.php" class="btn btn-primary mr-2">Listado</a>
-            <a href="venta-formulario.php" class="btn btn-primary mr-2">Nuevo</a>
-            <button type="submit" class="btn btn-success mr-2" id="btnGuardar" name="btnGuardar">Guardar</button>
-            <button type="submit" class="btn btn-danger" id="btnBorrar" name="btnBorrar">Borrar</button>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-12 form-group mt-4">
-            <?php if(isset($msg) && $msg != ""): ?>
-               <div class="alert alert-danger" role="alert">
-                   <?php echo $msg; ?>
-               </div>
-            <?php endif; ?>    
-            <label for="txtFechaNac">Fecha y hora:</label>
-            <select class="form-control d-inline" name="txtDia" id="txtDia" style="width: 80px">
-            <option selected="" disabled="">DD</option>
+          <h1 class="h3 mb-4 text-gray-800">Venta</h1>
+            <div class="row">
+                <div class="col-12 mb-3">
+                    <a href="venta-listado.php" class="btn btn-primary mr-2">Listado</a>
+                    <a href="venta-formulario.php" class="btn btn-primary mr-2">Nuevo</a>
+                    <button type="submit" class="btn btn-success mr-2" id="btnGuardar" name="btnGuardar">Guardar</button>
+                    <button type="submit" class="btn btn-danger" id="btnBorrar" name="btnBorrar">Borrar</button>
+                </div>
+            </div>
+            <?php if (isset($msg)): ?>
+            <div class="row">
+                <div class="col-12">
+                    <div class="alert <?php echo $msg["codigo"]; ?>" role="alert">
+                        <?php echo $msg["texto"]; ?>
+                    </div>
+                </div>
+            </div>
+            <?php endif;?>
+            <div class="row">
+                <div class="col-12 form-group">
+                    <label for="txtFechaNac" class="d-block">Fecha y hora:</label>
+                    <select class="form-control d-inline" name="txtDia" id="txtDia" style="width: 80px">
+                        <option selected="" disabled="">DD</option>
                         <?php for($i=1; $i<=31; $i++): ?>
                             <?php if(date("d") == $i): ?>
                                 <option selected value="<?php echo $i; ?>"><?php echo $i; ?></option>
@@ -75,9 +74,9 @@ include_once("header.php");
                                 <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
                             <?php endif; ?>
                         <?php endfor; ?>
-            </select>
-            <select class="form-control d-inline" name="txtMes" id="txtMes" style="width: 80px">
-            <option selected="" disabled="">MM</option>
+                    </select>
+                    <select class="form-control d-inline" name="txtMes" id="txtMes" style="width: 80px">
+                        <option selected="" disabled="">MM</option>
                         <?php for ($i = 1; $i <= 12; $i++): ?>
                             <?php if (date("m") == $i): ?>
                                 <option selected value="<?php echo $i; ?>"><?php echo $i; ?></option>
@@ -85,9 +84,9 @@ include_once("header.php");
                                 <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
                             <?php endif;?>
                         <?php endfor;?>
-            </select>
-            <select class="form-control d-inline" name="txtAnio" id="txtAnio" style="width: 100px">
-            <option selected="" disabled="">YYYY</option>
+                    </select>
+                    <select class="form-control d-inline" name="txtAnio" id="txtAnio" style="width: 100px">
+                        <option selected="" disabled="">YYYY</option>
                         <?php for ($i = 2020 ; $i <= date("Y"); $i++): ?>
                             <?php if (date("Y") == $i): ?>
                                 <option selected value="<?php echo $i; ?>"><?php echo $i; ?></option>
@@ -95,47 +94,49 @@ include_once("header.php");
                                 <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
                             <?php endif;?>
                         <?php endfor;?>
-            </select>
-            <input type="time" required="" class="form-control d-inline" style="width: 120px" name="txtTime" id="txtTime">
+                    </select>
+                    <input type="" required="" class="form-control d-inline" style="width: 120px" name="txtHora" id="txtHora" value="<?php echo date("H:i");?>">
+                  
+                </div>
+                <div class="col-6 form-group">
+                    <label for="lstCliente">Cliente:</label>
+                    <select required="" class="form-control selectpicker" data-live-search="true" name="lstCliente" id="lstCliente">
+                        <option value="" disabled selected>Seleccionar</option>
+                        <?php foreach($aClientes as $cliente): ?>
+                            <?php if($cliente->idcliente == $venta->fk_idcliente): ?>
+                                <option selected value="<?php echo $cliente->idcliente;?>"><?php echo $cliente->nombre; ?></option>
+                            <?php else: ?>
+                                <option value="<?php echo $cliente->idcliente;?>"><?php echo $cliente->nombre; ?></option>
+                            <?php endif; ?>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="col-6 form-group">
+                    <label for="lstProducto">Producto:</label>
+                    <select required="" class="form-control selectpicker" data-live-search="true" name="lstProducto" id="lstProducto" onchange="fBuscarPrecio();">
+                        <option value="" disabled selected>Seleccionar</option>
+                        <?php foreach($aProductos as $producto): ?>
+                            <?php if($producto->idproducto == $venta->fk_idproducto): ?>
+                                <option selected value="<?php echo $producto->idproducto;?>"><?php echo $producto->nombre; ?></option>
+                            <?php else: ?>
+                                <option value="<?php echo $producto->idproducto;?>"><?php echo $producto->nombre; ?></option>
+                            <?php endif; ?>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="col-6 form-group">
+                    <label for="txtPrecioUni">Precio unitario:</label>
+                    <input type="text" class="form-control" name="txtPrecioUni" id="txtPrecioUni" value="" required>
+                </div>
+                <div class="col-6 form-group">
+                    <label for="txtCantidad">Cantidad:</label>
+                    <input type="text" class="form-control" name="txtCantidad" id="txtCantidad" value="" onchange="fCalcularTotal();" required>
+                    <span id="msgStock" class="text-danger" style="display:none;">No hay stock suficiente</span>
+                </div>
+                <div class="col-6 form-group">
+                    <label for="txtTotal">Total:</label>
+                    <input type="text" class="form-control" name="txtTotal" id="txtTotal" value="" required>
+                </div>
+            </div>
         </div>
-         <div class="col-6 mt-4 form-group">
-            <label for="IstCliente">Cliente:</label>
-             <select name="IstCliente" id="IstCliente" class="form-control selectpicker">
-             <option value="" disabled selected>Seleccionar</option>
-                <?php foreach ($aClientes as $cliente) : ?>
-                    <?php if ($cliente->idcliente == $venta->fk_idcliente) : ?>
-                        <option selected value="<?php echo $cliente->idcliente; ?>"><?php echo $cliente->nombre; ?></option>
-                    <?php else : ?>
-                        <option value="<?php echo $$cliente->idcliente; ?>"><?php echo $cliente->nombre; ?></option>
-                    <?php endif; ?>
-                <?php endforeach; ?>
-             </select>
-         </div>
-                 
-         <div class="col-6 mt-4 form-group">
-            <label for="IstProducto">Producto:</label>
-             <select name="IstProducto" id="IstProducto" class="form-control selectpicker">
-             <option value="" disabled selected>Seleccionar</option>
-                <?php foreach ($aProductos as $producto) : ?>
-                    <?php if ($producto->idproducto == $venta->fk_idproducto) : ?>
-                        <option selected value="<?php echo $producto->idproducto; ?>"><?php echo $producto->nombre; ?></option>
-                    <?php else : ?>
-                        <option value="<?php echo $producto->idproducto; ?>"><?php echo $producto->nombre; ?></option>
-                    <?php endif; ?>
-                <?php endforeach; ?>
-             </select>
-         </div>
-        <div class="col-6 mt-4 form-group">
-            <label for="txtPrecioUnitario">Precio Unitario:</label>
-            <input type="text" required="" name="txtPrecioUnitario" id="txtPrecioUnitario" placeholder="$0" class="form-control">
-        </div>
-        <div class="col-6 mt-4 form-group">
-            <label for="txtCantidad">Cantidad:</label>
-            <input type="number" required="" name="txtCantidad" id="txtCantidad" class="form-control">
-        </div>
-        <div class="col-6 mt-4 form-group">
-            <label for="txtTotal">Total:</label>
-            <input type="number" required="" name="txtTotal" id="txtTotal" class="form-control">
-        </div>    
-    </div>
-</div>
+      </div>
