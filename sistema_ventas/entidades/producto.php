@@ -1,21 +1,19 @@
 <?php
 
-use Producto as GlobalProducto;
+class Producto
+{
+    private $idproducto;
+    private $nombre;
+    private $fk_idtipoproducto;
+    private $cantidad;
+    private $precio;
+    private $descripcion;
+    private $imagen;
 
- class Producto{
-     private $idproducto;
-     private $nombre;
-     private $cantidad;
-     private $precio;
-     private $descripcion;
-     private $fk_idtipoproducto;
-     private $imagen;
-
-
-     
     public function __construct()
     {
-
+        $this->cantidad = 0;
+        $this->precio = 0.0;
     }
 
     public function __get($atributo)
@@ -29,13 +27,14 @@ use Producto as GlobalProducto;
         return $this;
     }
 
-    public function cargarFormulario($request){
-        $this->idproducto = isset($request["id"])? $request["id"] : "";
-        $this->nombre = isset($request["txtNombre"])? $request["txtNombre"] : "";
-        $this->fk_idtipoproducto = isset($request["lstTipoProducto"])? $request["lstTipoProducto"] : "";
-        $this->cantidad = isset($request["txtCantidad"])? $request["txtCantidad"]: 0;
-        $this->precio = isset($request["txtPrecio"])? $request["txtPrecio"]: 0;
-        $this->descripcion = isset($request["txtDescripcion"])? $request["txtDescripcion"] : "";
+    public function cargarFormulario($request)
+    {
+        $this->idproducto = isset($request["id"]) ? $request["id"] : "";
+        $this->nombre = isset($request["txtNombre"]) ? $request["txtNombre"] : "";
+        $this->fk_idtipoproducto = isset($request["lstTipoProducto"]) ? $request["lstTipoProducto"] : "";
+        $this->cantidad = isset($request["txtCantidad"]) ? $request["txtCantidad"] : 0;
+        $this->precio = isset($request["txtPrecio"]) ? $request["txtPrecio"] : 0;
+        $this->descripcion = isset($request["txtDescripcion"]) ? $request["txtDescripcion"] : "";
     }
 
     public function insertar()
@@ -45,20 +44,19 @@ use Producto as GlobalProducto;
         //Arma la query
         $sql = "INSERT INTO productos (
                     nombre,
+                    fk_idtipoproducto,
                     cantidad,
                     precio,
                     descripcion,
-                    fk_idtipoproduto,
-                    imagen,
+                    imagen
                 ) VALUES (
                     '$this->nombre',
-                    '$this->cantidad',
-                     $this->precio,
-                    '$this->descripcion',
                     $this->fk_idtipoproducto,
+                    $this->cantidad,
+                    $this->precio,
+                    '$this->descripcion',
                     '$this->imagen'
                 );";
-         //print_r($sql);exit;
         //Ejecuta la query
         if (!$mysqli->query($sql)) {
             printf("Error en query: %s\n", $mysqli->error . " " . $sql);
@@ -75,12 +73,12 @@ use Producto as GlobalProducto;
         $mysqli = new mysqli(Config::BBDD_HOST, Config::BBDD_USUARIO, Config::BBDD_CLAVE, Config::BBDD_NOMBRE, Config::BBDD_PORT);
         $sql = "UPDATE productos SET
                 nombre = '$this->nombre',
-                cantidad = '$this->cantidad',
+                fk_idtipoproducto = $this->fk_idtipoproducto,
+                cantidad = $this->cantidad,
                 precio = $this->precio,
                 descripcion = '$this->descripcion',
-                imagen = '$this->imagen',
-                fk_idtipoproducto =  $this->fk_idtipoproducto
-                WHERE idcliente = $this->idcliente";
+                imagen = '$this->imagen'
+                WHERE idproducto = $this->idproducto";
 
         if (!$mysqli->query($sql)) {
             printf("Error en query: %s\n", $mysqli->error . " " . $sql);
@@ -104,13 +102,13 @@ use Producto as GlobalProducto;
         $mysqli = new mysqli(Config::BBDD_HOST, Config::BBDD_USUARIO, Config::BBDD_CLAVE, Config::BBDD_NOMBRE, Config::BBDD_PORT);
         $sql = "SELECT idproducto,
                         nombre,
+                        fk_idtipoproducto,
                         cantidad,
                         precio,
                         descripcion,
-                        imagen,
-                        fk_idtipoproducto
+                        imagen
                 FROM productos
-                WHERE idproducto = $this->idproducto";
+                WHERE idproducto = " . $this->idproducto;
         if (!$resultado = $mysqli->query($sql)) {
             printf("Error en query: %s\n", $mysqli->error . " " . $sql);
         }
@@ -119,44 +117,44 @@ use Producto as GlobalProducto;
         if ($fila = $resultado->fetch_assoc()) {
             $this->idproducto = $fila["idproducto"];
             $this->nombre = $fila["nombre"];
+            $this->fk_idtipoproducto = $fila["fk_idtipoproducto"];
             $this->cantidad = $fila["cantidad"];
             $this->precio = $fila["precio"];
             $this->descripcion = $fila["descripcion"];
-            $this->fk_idtipoproducto = $fila["fk_idtipoproducto"];
             $this->imagen = $fila["imagen"];
         }
         $mysqli->close();
-
+        return $this;
     }
 
-    public function obtenerTodos(){
+    public function obtenerPorTipo($idTipoProducto)
+    {
         $mysqli = new mysqli(Config::BBDD_HOST, Config::BBDD_USUARIO, Config::BBDD_CLAVE, Config::BBDD_NOMBRE, Config::BBDD_PORT);
-        $sql = "SELECT 
-                    idproducto,
-                    nombre,
-                    cantidad,
-                    precio,
-                    descripcion,
-                    imagen,
-                    fk_idtipoproducto
-                FROM productos";
+        $sql = "SELECT idproducto,
+                                nombre,
+                                fk_idtipoproducto,
+                                cantidad,
+                                precio,
+                                descripcion,
+                                imagen
+                        FROM productos
+                        WHERE fk_idtipoproducto = " . $idTipoProducto;
         if (!$resultado = $mysqli->query($sql)) {
             printf("Error en query: %s\n", $mysqli->error . " " . $sql);
         }
 
         $aResultado = array();
-        if($resultado){
+        if ($resultado) {
             //Convierte el resultado en un array asociativo
-
-            while($fila = $resultado->fetch_assoc()){
+            while ($fila = $resultado->fetch_assoc()) {
                 $entidadAux = new Producto();
                 $entidadAux->idproducto = $fila["idproducto"];
                 $entidadAux->nombre = $fila["nombre"];
+                $entidadAux->fk_idtipoproducto = $fila["fk_idtipoproducto"];
                 $entidadAux->cantidad = $fila["cantidad"];
                 $entidadAux->precio = $fila["precio"];
                 $entidadAux->descripcion = $fila["descripcion"];
                 $entidadAux->imagen = $fila["imagen"];
-                $entidadAux->fk_idtipoproducto = $fila["fk_idtipoproducto"];
                 $aResultado[] = $entidadAux;
             }
         }
@@ -164,11 +162,38 @@ use Producto as GlobalProducto;
         return $aResultado;
     }
 
+    public function obtenerTodos()
+    {
+        $mysqli = new mysqli(Config::BBDD_HOST, Config::BBDD_USUARIO, Config::BBDD_CLAVE, Config::BBDD_NOMBRE, Config::BBDD_PORT);
+        $sql = "SELECT
+                    idproducto,
+                    nombre,
+                    fk_idtipoproducto,
+                    cantidad,
+                    precio,
+                    descripcion,
+                    imagen
+                FROM productos ORDER BY idproducto DESC";
+        if (!$resultado = $mysqli->query($sql)) {
+            printf("Error en query: %s\n", $mysqli->error . " " . $sql);
+        }
+
+        $aResultado = array();
+        if ($resultado) {
+            //Convierte el resultado en un array asociativo
+            while ($fila = $resultado->fetch_assoc()) {
+                $entidadAux = new Producto();
+                $entidadAux->idproducto = $fila["idproducto"];
+                $entidadAux->nombre = $fila["nombre"];
+                $entidadAux->fk_idtipoproducto = $fila["fk_idtipoproducto"];
+                $entidadAux->cantidad = $fila["cantidad"];
+                $entidadAux->precio = $fila["precio"];
+                $entidadAux->descripcion = $fila["descripcion"];
+                $entidadAux->imagen = $fila["imagen"];
+                $aResultado[] = $entidadAux;
+            }
+        }
+        $mysqli->close();
+        return $aResultado;
+    }
 }
-
-
- 
-
-
-
-?>

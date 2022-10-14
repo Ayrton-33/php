@@ -44,7 +44,6 @@ class Venta
         $this->total = isset($request["txtTotal"]) ? $request["txtTotal"] : 0.0;
     }
 
-
     public function insertar()
     {
         //Instancia la clase mysqli con el constructor parametrizado
@@ -133,7 +132,6 @@ class Venta
             $this->total = $fila["total"];
         }
         $mysqli->close();
-
     }
 
     public function obtenerVentasPorCliente($idCliente)
@@ -168,7 +166,6 @@ class Venta
         }
         $mysqli->close();
         return $aResultado;
-
     }
 
     public function obtenerTodos()
@@ -272,5 +269,4 @@ class Venta
         $mysqli->close();
         return $fila["total"] != "" ? $fila["total"] : 0;
     }
-
 }

@@ -1,13 +1,10 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
 
-include_once("config.php");
-include_once("entidades/producto.php");
-include_once("entidades/tipoproducto.php");
+include_once "config.php";
+include_once "entidades/producto.php";
+include_once "entidades/tipoproducto.php";
 
-$producto = new  Producto();
+$producto = new Producto();
 
 if ($_POST) {
     if (isset($_POST["btnGuardar"])) {
@@ -86,14 +83,12 @@ $aTipoProductos = $tipoProducto->obtenerTodos();
 $pg = "Edición de productos";
 include_once "header.php";
 
+
 ?>
-<script src="https://cdn.ckeditor.com/ckeditor5/35.1.0/classic/ckeditor.js"></script>
-<div class="container">
-    <div class="row">
-        <div class="col-12 pt-5">
-            <h1>Productos</h1>
-        </div>
-    </div>
+
+<div class="container-fluid">
+
+    <h1 class="h3 mb-4 text-gray-800">Productos</h1>
     <?php if (isset($msg)) : ?>
         <div class="row">
             <div class="col-12">
@@ -104,7 +99,7 @@ include_once "header.php";
         </div>
     <?php endif; ?>
     <div class="row">
-        <div class="col-12 mt-4">
+        <div class="col-12 mb-3">
             <a href="producto-listado.php" class="btn btn-primary mr-2">Listado</a>
             <a href="producto-formulario.php" class="btn btn-primary mr-2">Nuevo</a>
             <button type="submit" class="btn btn-success mr-2" id="btnGuardar" name="btnGuardar">Guardar</button>
@@ -112,9 +107,9 @@ include_once "header.php";
         </div>
     </div>
     <div class="row">
-        <div class="col-6 mt-4 form-group">
+        <div class="col-6 form-group">
             <label for="txtNombre">Nombre:</label>
-            <input type="text" required="" name="txtNombre" id="txtNombre" class="form-control" value="<?php echo $producto->nombre; ?>">
+            <input type="text" required="" class="form-control" name="txtNombre" id="txtNombre" value="<?php echo $producto->nombre; ?>">
         </div>
         <div class="col-6 form-group">
             <label for="txtNombre">Tipo de producto:</label>
@@ -149,8 +144,10 @@ include_once "header.php";
             <?php endif; ?>
         </div>
     </div>
+
 </div>
 
+</div>
 <script>
     ClassicEditor
         .create(document.querySelector('#txtDescripcion'))
@@ -158,3 +155,4 @@ include_once "header.php";
             console.error(error);
         });
 </script>
+<?php include_once "footer.php"; ?>

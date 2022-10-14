@@ -1,5 +1,8 @@
 <?php
 
+if(!isset($_SESSION["nombre"])){
+  header("Location: login.php");
+}
 
 if($_POST){
   if(isset($_POST["btnCerrar"])){
@@ -8,7 +11,9 @@ if($_POST){
     header("Location: login.php");
     }
   }
-}    
+}  
+
+$pg = "Inicio";
 ?>
 
 <!DOCTYPE html>
